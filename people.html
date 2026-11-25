@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>人物一覧｜PORTRAITS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="plain">
+
+<main>
+  <section class="page-head">
+    <h1 class="sec-title">PEOPLE<span class="tag">人物一覧</span></h1>
+    <p id="count" class="count"></p>
+  </section>
+
+  <section class="finder">
+    <input id="q" type="search" placeholder="名前で探す（例：青木 / AOKI）" aria-label="名前で探す">
+    <div id="chips" class="chips" role="group" aria-label="職種で絞り込む"></div>
+  </section>
+
+  <section class="sec-grid"><div class="grid" id="list"></div><p id="empty" class="empty" hidden>当てはまる人が見つかりませんでした。</p></section>
+</main>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script>
+// 一覧は「押したらその人のページへ」。職種と名前で絞り込める。
+const roles = ["すべて", ...new Set(PEOPLE.map((p) => p.role))];
+let role = new URLSearchParams(location.search).get("role") || "すべて";
+if (!roles.includes(role)) role = "すべて";
+
+$("#chips").innerHTML = roles.map((r) => `<button type="button" data-role="${r}">${r}</button>`).join("");
+
+function render() {
+  const q = $("#q").value.trim().toLowerCase().replace(/\s+/g, "");
+  const hit = PEOPLE.filter((p) =>
+    (role === "すべて" || p.role === role) &&
+    (!q || (p.jp + p.en).toLowerCase().replace(/\s+/g, "").includes(q)));
+  $("#list").innerHTML = hit.map(card).join("");
+  $("#empty").hidden = hit.length > 0;
+  $("#count").textContent = `${hit.length}人 / 全${PEOPLE.length}人`;
+  document.querySelectorAll("#chips button").forEach((b) => b.classList.toggle("on", b.dataset.role === role));
+}
+render();
+
+$("#q").addEventListener("input", render);
+$("#chips").addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  role = b.dataset.role;
+  render();
+});
+const go = (el) => (location.href = `person.html?id=${el.dataset.id}`);
+$("#list").addEventListener("click", (e) => { const c = e.target.closest(".card"); if (c) go(c); });
+$("#list").addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.classList.contains("card")) go(e.target); });
+</script>
+</body>
+</html>

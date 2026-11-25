@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>PORTRAITS｜100人の横顔を紹介するメディア</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide-core.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 0. 背景モザイク：画面に固定して、ずっと後ろに残す -->
+<div class="mosaic" id="mosaic" aria-hidden="true"></div>
+
+<main>
+  <!-- 1. ヒーロー -->
+  <section class="sec-main">
+    <div class="main-tit">
+      <h1 class="tit">100<br>Portraits<br>of <span class="blue">People</span></h1>
+      <p class="sub"><span>はたらく人、つくる人。</span><span>「<span class="blue">100人</span>」の横顔を紹介する</span></p>
+    </div>
+  </section>
+
+  <!-- 2. このメディアについて -->
+  <section class="sec-about" id="about">
+    <div class="band">
+      <div class="inner">
+        <div class="logo fade">About</div>
+        <h2 class="fade">肩書きの奥にいる、<br>その人に会いにいく</h2>
+        <p class="fade">名前と肩書きだけでは、人のことはわからない。<br>どんな道具を使い、何に迷い、何を大事にしているのか。<br class="pc">仕事場を訪ねて、本人のことばで聞いてきました。</p>
+        <p class="fade">建築家、写真家、料理人、編集者、職人。<br>分野も年齢もばらばらの100人。<br>気になる顔を見つけたら、押してみてください。<br>その人の話が読めます。</p>
+        <a class="btn light fade" href="people.html">100人の一覧を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 特集インタビュー5人：左の題字は貼り付き、右のカードが順に重なる -->
+  <section class="sec-interview" id="interview">
+    <div class="sticky-l"><h2>SPECIAL INTERVIEW</h2></div>
+    <div class="sticky-r" id="interviews"></div>
+  </section>
+
+  <!-- 4〜7. 流れるカード → 格子 を2回 -->
+  <div id="collections"></div>
+
+  <section class="sec-more">
+    <a class="btn" href="people.html">すべての人を一覧で見る</a>
+  </section>
+</main>
+
+<!-- 8. モーダル（1つだけ置いて、押された人の中身を入れ替える） -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-in" role="dialog" aria-modal="true">
+    <button class="modal-close" aria-label="閉じる"></button>
+    <div class="photo"><img id="m-photo" alt=""></div>
+    <div class="txt">
+      <p class="en" id="m-en"></p>
+      <p class="jp" id="m-jp"></p>
+      <p class="role" id="m-role"></p>
+      <p class="comment" id="m-intro"></p>
+      <a class="btn small" id="m-link" href="#">この人の話を読む</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.3/dist/js/splide-extension-auto-scroll.min.js"></script>
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

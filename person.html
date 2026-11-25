@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>人物紹介｜PORTRAITS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="plain">
+
+<!-- 1人ぶんの紹介ページ。全員同じ型で、URLの ?id=番号 で中身を入れ替える -->
+<main id="person"></main>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script>
+const id = Number(new URLSearchParams(location.search).get("id")) || 1;
+const p = PEOPLE[id - 1] || PEOPLE[0];
+const prev = PEOPLE[(p.id - 2 + PEOPLE.length) % PEOPLE.length];
+const next = PEOPLE[p.id % PEOPLE.length];
+const same = PEOPLE.filter((x) => x.role === p.role && x.id !== p.id).slice(0, 4);
+document.title = `${p.jp}（${p.role}）｜${SITE.name}`;
+
+$("#person").innerHTML = `
+  <section class="p-head">
+    <div class="photo"><img src="${p.photo}" alt="${p.jp}"></div>
+    <div class="info">
+      <p class="no">No.${String(p.id).padStart(3, "0")}</p>
+      <p class="en">${p.en}</p>
+      <h1>${p.jp}</h1>
+      <a class="role-chip" href="people.html?role=${encodeURIComponent(p.role)}">${p.role}</a>
+      <p class="intro">${p.intro}</p>
+      ${p.keywords.length ? `<ul class="keys">${p.keywords.map((k) => `<li>${k}</li>`).join("")}</ul>` : ""}
+    </div>
+  </section>
+
+  ${p.qa.length ? `
+  <section class="p-body"><div class="wrap fade">
+    <h2>この人に聞いた</h2>
+    ${qaHtml(p.qa)}
+  </div></section>` : ""}
+
+  <nav class="p-pager">
+    <a href="person.html?id=${prev.id}"><span>← 前の人</span>${prev.jp}</a>
+    <a href="people.html" class="all">一覧へ</a>
+    <a href="person.html?id=${next.id}"><span>次の人 →</span>${next.jp}</a>
+  </nav>
+
+  ${same.length ? `
+  <section class="p-same">
+    <h2 class="sec-title fade">SAME FIELD<span class="tag">同じ職種の人</span></h2>
+    <div class="grid four">${same.map(card).join("")}</div>
+  </section>` : ""}`;
+
+watchFades();
+document.addEventListener("click", (e) => {
+  const c = e.target.closest(".card");
+  if (c) location.href = `person.html?id=${c.dataset.id}`;
+});
+</script>
+</body>
+</html>

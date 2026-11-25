@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>SPECIAL INTERVIEW｜PORTRAITS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="plain">
+
+<!-- 特集インタビュー。5人とも同じ型で、URLの ?id=1〜5 で中身だけ入れ替える -->
+<main id="article"></main>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script>
+const id = Number(new URLSearchParams(location.search).get("id")) || 1;
+const p = INTERVIEWS.find((x) => x.id === id) || INTERVIEWS[0];
+const others = INTERVIEWS.filter((x) => x.id !== p.id);
+const oneLine = p.quote.replace(/\n/g, "");
+const half = Math.ceil(p.qa.length / 2);
+document.title = `${p.jp}｜SPECIAL INTERVIEW｜${SITE.name}`;
+
+$("#article").innerHTML = `
+  <!-- 全画面の写真（スマホは1枚目だけ） -->
+  <section class="a-main">
+    <div class="pic"><img src="${p.face}" alt="${p.jp}"></div>
+    <div class="pic"><img src="${p.full}" alt=""></div>
+    <p class="logo">SPECIAL<br>INTERVIEW</p>
+    <div class="tit-box">
+      <p class="name">${p.jp}<span>${p.en}</span></p>
+      <h1>${p.quote}</h1>
+    </div>
+  </section>
+
+  <!-- リード -->
+  <section class="a-lead"><div class="wrap">
+    <div class="visual fade"><img src="${p.full}" alt=""></div>
+    <div class="fade">
+      <p class="ep">EPISODE.0${p.id}　${p.role}</p>
+      <h2>「${oneLine}」</h2>
+      <p class="a">${p.lead}</p>
+      ${qaHtml(p.qa.slice(0, half))}
+    </div>
+  </div></section>
+
+  <!-- 大きな顔写真の上を、英字が横に流れる帯 -->
+  <section class="a-band">
+    <img src="${p.face}" alt="">
+    <p class="run" aria-hidden="true">${`${p.en}&nbsp;&nbsp;&nbsp;`.repeat(6)}</p>
+  </section>
+
+  <!-- 本文の後半（紺地） -->
+  <section class="a-body"><div class="wrap">
+    <div class="fade">
+      ${qaHtml(p.qa.slice(half))}
+      <p class="profile"><b>${p.jp}</b>（${p.role}）<br>${p.profile}</p>
+    </div>
+    <div class="side fade"><img src="${p.full}" alt=""></div>
+  </div></section>
+
+  <!-- ほかの4人 -->
+  <section class="a-foot">
+    <h2 class="sec-title fade">SPECIAL <br class="sp">INTERVIEW<span class="tag">ほかの4人の話</span></h2>
+    <div class="list">
+      ${others.map((o) => `
+        <a href="interview.html?id=${o.id}">
+          <img src="${o.face}" alt="${o.jp}" loading="lazy">
+          <p class="en">${o.en}</p>
+          <p class="jp">${o.jp}<small>${o.role}</small></p>
+          <span class="arrow">→</span>
+        </a>`).join("")}
+    </div>
+  </section>
+
+  <!-- トップへ戻るバナー -->
+  <a class="a-bnr" href="index.html">
+    <img src="${MOSAIC[1]}" alt="">
+    <span>100 Portraits<br>of People</span>
+  </a>`;
+
+watchFades();
+</script>
+</body>
+</html>
